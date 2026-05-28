@@ -9,14 +9,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-<<<<<<< HEAD
       Cookies.set("local_access_token_p", data.access, { expires: 7 });
-=======
-      // Зберігаємо токен у куки на 7 днів.
-      // Якщо бекенд повертає access і refresh, зберігайте потрібний
-      Cookies.set("local_access_token_p", data.access, { expires: 7 });
-
->>>>>>> 4cc7be0704e5c7eb84c13c88ea0ea02422a69448
       router.push("/diagrams");
     },
     onError: (error) => {
@@ -26,8 +19,6 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
-<<<<<<< HEAD
-  // Дістаємо наш готовий хук для логіну
   const loginMutation = useLogin();
 
   return useMutation({
@@ -47,18 +38,6 @@ export const useRegister = () => {
           password: variables.password,
         });
       }
-=======
-  const router = useRouter();
-
-  return useMutation({
-    mutationFn: registerUser,
-    onSuccess: (data) => {
-      // Опціонально: якщо після реєстрації бекенд одразу віддає токен, теж зберігаємо
-      if (data.access) {
-        Cookies.set("local_access_token_p", data.access, { expires: 7 });
-      }
-      router.push("/diagrams");
->>>>>>> 4cc7be0704e5c7eb84c13c88ea0ea02422a69448
     },
     onError: (error) => {
       console.error("Помилка реєстрації:", error);
