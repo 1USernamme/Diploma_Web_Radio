@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+```markdown
+# 📉 SDR Signal Analytics Frontend
 
-## Getting Started
+Клієнтська частина додатку для моніторингу радіоелектронного простору. Інтерфейс взаємодіє з DRF-бекендом, дозволяє симулювати сигнали, завантажувати сирі дампи з SDR-приймачів та візуалізувати отримані спектрограми.
 
-First, run the development server:
+---
 
+## 🎨 Основний функціонал
+1. **Кабінет користувача:** Реєстрація та авторизація за допомогою JWT-токенів.
+2. **Модуль симулятора:** Інтерактивні повзунки для налаштування частоти, рівня шуму та частоти дискретизації для миттєвої перевірки алгоритму.
+3. **Обробник SDR файлів:** Форма для завантаження `.csv` / `.txt` файлів з сирими відліками амплітуд.
+4. **Графічний аналізатор:** Візуалізація двох ключових графіків:
+   * **Часова область (Time Domain):** Осцилограма сигналу ($Time \ vs \ Signal$).
+   * **Частотна область (Frequency Domain):** Спектрограма за результатами FFT ($Frequency \ vs \ Amplitude$).
+5. **Дашборд метрик:** Відмальовка картки загрози (`is_threat`), рівня SNR у dB та знайденої частоти випромінювача.
+
+---
+
+## 🚦 Інтеграція з API
+
+Для коректної роботи фронтенд має надсилати запити на бекенд (`http://localhost:8000`).
+
+### Схема обробки даних (Data Flow)
+1. Користувач завантажує файл або надсилає параметри симуляції.
+2. Фронтенд робить `POST` запит на бекенд.
+3. Отриманий масив `time` та `signal` передається у графік **Часової області**.
+4. Масиви `frequencies` та `amplitudes` передаються у графік **Частотної області**.
+5. Якщо `metrics.is_threat` дорівнює `true`, інтерфейс має підсвітити картку червоним кольором (Увага: Загроза!).
+
+---
+
+## 📈 Рекомендації щодо візуалізації графіків
+Для побудови графіків рекомендується використовувати бібліотеки **Chart.js**, **ApexCharts** або **Recharts** (для React).
+
+* **Графік 1 (Сигнал):** Тип `line` (лінійний). X-вісь: `time` (с), Y-вісь: `signal` (В/відносні одиниці).
+* **Графік 2 (Спектр FFT):** Тип `line` або `bar`. X-вісь: `frequencies` (Гц), Y-вісь: `amplitudes`. Сама права точка осі X буде дорівнювати $\frac{Sampling \ Rate}{2}$ (Частота Найквіста).
+
+---
+
+## 🛠️ Встановлення та запуск (Приклад для React / Vue / Vite)
+
+1. Встановіть залежності (залежно від вашого фреймворку):
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm install
+# або
+yarn install
